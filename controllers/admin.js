@@ -49,6 +49,12 @@ const Product = require('../models/product')
     res.redirect('/admin/products')
   }
 
+  exports.postDeleteProduct = (req, res, next) => {
+    const { productId } = req.body
+    // Product.deleteById(productId)
+ 
+  }
+
   exports.getProducts = (req, res, next) => {
     Product.fetchAll(products => {
         res.render('admin/products', {
