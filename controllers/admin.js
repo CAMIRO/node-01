@@ -10,12 +10,15 @@ const Product = require('../models/product')
   
   exports.postAddProduct = (req, res, next) => {
     const { title, imageUrl, description, price } = req.body
-    const product = new Product(null, title, imageUrl, description, price)
-    product
-      .save()
-      .then(() => res.redirect('/'))
+    Product.create({
+      title,
+      price,
+      imageUrl,
+      description 
+    })
+      .then(res =>console.log('Product Created ✅'))
       .catch(err => console.log(err))
-    
+
   };
 
   exports.getEditProduct = (req, res, next) => {
