@@ -1,11 +1,18 @@
-const Sequelize = require('sequelize')
-require('dotenv').config()
+const mongodb = require("mongodb");
+const MongoClient = mongodb.MongoClient;
+require("dotenv").config();
 
-const { DB_DATABASE, DB_USER, DB_PASSWORD, DB_HOST } = process.env
+const { DB_USER, DB_PASSWORD, DB_CLUSTER } = process.env;
 
-const sequelize = new Sequelize( DB_DATABASE,  DB_USER,  DB_PASSWORD, { 
-    dialect: 'mysql', 
-    host: DB_HOST 
-})
+const uri = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_CLUSTER}.mongodb.net/?retryWrites=true&w=majority`;
 
-module.exports = sequelize
+const mongoConnect = (callback) => {
+  MongoClient.connect(uri)
+    .then((client) => {
+      callback(client);
+      console.log("Connected!");
+    })
+    .catch((err) => console.log(err));
+};
+
+module.exports = mongoConnect;
