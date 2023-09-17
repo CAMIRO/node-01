@@ -23,46 +23,46 @@ const Product = require('../models/product')
 
   };
 
-  // exports.getEditProduct = (req, res, next) => {
-  //   const editMode = req.query.edit
-  //   if(!editMode){
-  //     return res.redirect('/')
-  //   }
-  //   const { productId } = req.params
+  exports.getEditProduct = (req, res, next) => {
+    const editMode = req.query.edit
+    if(!editMode){
+      return res.redirect('/')
+    }
+    const { productId } = req.params
 
-  //   req.user.getProducts({ where: { id: productId } })
-  //     .then(products => {
-  //       const product = products[0]
-  //       if(!product){
-  //         return res.redirect('/')
-  //       }
-  //       res.render('admin/edit-product', {
-  //         pageTitle: 'Edit Product',
-  //         path: '/admin/edit-product',
-  //         editing: editMode,
-  //         product
-  //       });
-  //     })
-  //     .catch(err => console.log(err))
+    Product
+      .findById(productId)  
+      .then(product => {
+        if(!product){
+          return res.redirect('/')
+        }
+        res.render('admin/edit-product', {
+          pageTitle: 'Edit Product',
+          path: '/admin/edit-product',
+          editing: editMode,
+          product
+        });
+      })
+      .catch(err => console.log(err))
     
-  // };
+  };
 
-  // exports.postEditProduct = (req, res, next) => {
-  //   const { productId , title, price, imageUrl, description } = req.body
-  //   Product.findByPk(productId)
-  //     .then(product =>{
-  //       product.title = title
-  //       product.price = price
-  //       product.description = description
-  //       product.imageUrl = imageUrl
-  //       return product.save()
-  //     })
-  //     .then(result => {
-  //       console.log('PRODUCT UPDATED')
-  //       res.redirect('/admin/products')
-  //     })
-  //     .catch(err => console.log(err))
-  // }
+  exports.postEditProduct = (req, res, next) => {
+    const { productId , title, price, imageUrl, description } = req.body
+    Product.findByPk(productId)
+      .then(product =>{
+        product.title = title
+        product.price = price
+        product.description = description
+        product.imageUrl = imageUrl
+        return product.save()
+      })
+      .then(result => {
+        console.log('PRODUCT UPDATED')
+        res.redirect('/admin/products')
+      })
+      .catch(err => console.log(err))
+  }
 
   // exports.postDeleteProduct = (req, res, next) => {
   //   const { productId } = req.body
@@ -77,15 +77,14 @@ const Product = require('../models/product')
   //   .catch(err => console.log(err))
   // }
 
-  // exports.getProducts = (req, res, next) => {
-  //   req.user
-  //     .getProducts()
-  //     .then(products => {
-  //       res.render('admin/products', {
-  //         prods: products,
-  //         pageTitle: 'Admin products',
-  //         path: '/admin/products'
-  //       })
-  //     })
-  //     .catch(err => console.log(err))
-  // }
+  exports.getProducts = (req, res, next) => {
+    Product.fetchAll()
+      .then(products => {
+        res.render('admin/products', {
+          prods: products,
+          pageTitle: 'Admin products',
+          path: '/admin/products'
+        })
+      })
+      .catch(err => console.log(err))
+  }
