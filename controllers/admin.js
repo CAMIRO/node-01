@@ -67,18 +67,15 @@ const Product = require('../models/product')
       .catch(err => console.log(err))
   }
 
-  // exports.postDeleteProduct = (req, res, next) => {
-  //   const { productId } = req.body
-  //   Product.findByPk(productId)
-  //   .then(product =>{
-  //     return product.destroy()
-  //   })
-  //   .then(result => {
-  //     console.log('PRODUCT DELETED');
-  //     res.redirect('/admin/products')
-  //   })
-  //   .catch(err => console.log(err))
-  // }
+  exports.postDeleteProduct = (req, res, next) => {
+    const { productId } = req.body
+    Product.deleteById(productId)
+    .then(() => {
+      console.log('PRODUCT DELETED');
+      res.redirect('/admin/products')
+    })
+    .catch(err => console.log(err))
+  }
 
   exports.getProducts = (req, res, next) => {
     Product.fetchAll()
