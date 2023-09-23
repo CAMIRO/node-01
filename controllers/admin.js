@@ -49,14 +49,17 @@ const Product = require('../models/product')
 
   exports.postEditProduct = (req, res, next) => {
     const { productId , title, price, imageUrl, description } = req.body
-    Product.findByPk(productId)
-      .then(product =>{
-        product.title = title
-        product.price = price
-        product.description = description
-        product.imageUrl = imageUrl
-        return product.save()
-      })
+
+    const product = new Product(
+      title, 
+      price, 
+      description, 
+      imageUrl, 
+      productId
+    )
+
+    product
+      .save()
       .then(result => {
         console.log('PRODUCT UPDATED')
         res.redirect('/admin/products')
