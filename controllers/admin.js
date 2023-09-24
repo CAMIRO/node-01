@@ -10,8 +10,15 @@ const Product = require('../models/product')
   
   exports.postAddProduct = (req, res, next) => {
     const { title, price, description, imageUrl } = req.body
-    const product = new Product(title, price, description, imageUrl )
-      product
+    const product = new Product(
+        title, 
+        price, 
+        description, 
+        imageUrl, 
+        null, 
+        req.user._id
+    )
+    product
       .save()   
       .then(result =>{
         console.log('Product Created ✅', result)
@@ -21,7 +28,7 @@ const Product = require('../models/product')
       })
       .catch(err => console.log(err))
 
-  };
+  }
 
   exports.getEditProduct = (req, res, next) => {
     const editMode = req.query.edit
@@ -45,7 +52,7 @@ const Product = require('../models/product')
       })
       .catch(err => console.log(err))
     
-  };
+  }
 
   exports.postEditProduct = (req, res, next) => {
     const { productId , title, price, imageUrl, description } = req.body
