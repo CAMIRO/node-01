@@ -60,6 +60,8 @@ userSchema.methods.removeFromCart = function(productId) {
     return this.save()
 }
 
+userSchema.methods.addOrder
+
 module.exports = mongoose.model('User', userSchema)
 
 
