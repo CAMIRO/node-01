@@ -29,6 +29,7 @@ const authRoutes = require("./routes/auth");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+
 app.use(
   session({ 
     secret: 'my secret', 
@@ -37,26 +38,11 @@ app.use(
     store 
 }))
 
-app.use((req, res, next) => {
-  User
-    .findById("6515e109cc5a0165389b85f0")
-    .then(user => {
-      req.user = user
-      next()
-    })
-    .catch(err => console.log(err))
-
-});
-
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
 app.use(errorController.get404);
-
-
-
-
 
 mongoose
   .connect(MONGODB_URI)

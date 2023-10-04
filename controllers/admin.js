@@ -5,7 +5,7 @@ const Product = require('../models/product')
           pageTitle: 'Add Product',
           path: '/admin/add-product',
           editing: false,
-          isAuthenticated: req.isLoggedIn
+          isAuthenticated: req.session.isLoggedIn
       });
     };
   
@@ -18,7 +18,7 @@ const Product = require('../models/product')
       price, 
       description, 
       imageUrl, 
-      userId: req.user 
+      userId: req.session.user 
     })
 
     product
@@ -51,7 +51,7 @@ const Product = require('../models/product')
           path: '/admin/edit-product',
           editing: editMode,
           product,
-          isAuthenticated: req.isLoggedIn
+          isAuthenticated: req.session.isLoggedIn
         });
       })
       .catch(err => console.log(err))
@@ -97,7 +97,7 @@ const Product = require('../models/product')
           prods: products,
           pageTitle: 'Admin products',
           path: '/admin/products',
-          isAuthenticated: req.isLoggedIn
+          isAuthenticated: req.session.isLoggedIn
         })
       })
       .catch(err => console.log(err))
