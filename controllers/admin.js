@@ -18,7 +18,7 @@ const Product = require('../models/product')
       price, 
       description, 
       imageUrl, 
-      userId: req.session.user 
+      userId: req.user 
     })
 
     product
