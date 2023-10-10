@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
 const csrf = require('csurf')
+const flash = require('connect-flash')
 
 require("dotenv").config();
 
@@ -33,6 +34,7 @@ const authRoutes = require("./routes/auth");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
+// Creating the session
 app.use(
   session({ 
     secret: 'my secret', 
@@ -40,8 +42,13 @@ app.use(
     saveUninitialized: false, 
     store 
 }))
+// Using CSRF TOKEN protection
 app.use(csrfProtection)
 
+// initializing the flash error handler
+app.use(flash())
+
+// Signing Up with a registered User
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next()
@@ -55,6 +62,7 @@ app.use((req, res, next) => {
   .catch(err => console.log(err))
 })
 
+// Setting Up the global log boolean and the csrf token accross all views
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn
   res.locals.csrfToken = req.csrfToken()
