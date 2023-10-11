@@ -104,3 +104,16 @@ exports.postLogout = (req, res, next) => {
  })
 }
   
+exports.getReset = (req, res, next) => {
+  let message = req.flash('error')
+  if ( message.length > 0 ) {
+    message = message[0]
+  } else {
+    message = null
+  }
+  res.render('auth/reset', {
+    path: '/reset',
+    pageTitle: 'Reset Password',
+    errorMessage: message
+  })
+}
