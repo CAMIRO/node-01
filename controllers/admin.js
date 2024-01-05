@@ -62,21 +62,26 @@ const Product = require('../models/product')
     Product
       .findById(productId)
       .then(product =>{
+        if(product.userId !== req.user._id){
+          return res.redirect('/')
+        }
         product.title = title
         product.price = price
         product.imageUrl = imageUrl
         product.description = description
-        return product.save()
-      }).then(result => {
-        console.log('PRODUCT UPDATED')
-        res.redirect('/admin/products')
+        return product
+              .save()
+              .then(result => {
+                console.log('PRODUCT UPDATED')
+                res.redirect('/admin/products')
+              })
       })
       .catch(err => console.log(err))
   }
 
   exports.postDeleteProduct = (req, res, next) => {
     const { productId } = req.body
-    Product.findByIdAndRemove(productId)
+    Product.deleteOne({_id: productId, userId: req.user._id})
     .then(() => {
       console.log('PRODUCT DELETED');
       res.redirect('/admin/products')
