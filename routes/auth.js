@@ -3,13 +3,22 @@ const { check, body } = require('express-validator')
 
 const authController = require('../controllers/auth');
 
+const User = require('../models/user')
+
 const router = express.Router();
 
 router.get('/login', authController.getLogin);
 
 router.get('/signup', authController.getSignup);
 
-router.post('/login', authController.postLogin);
+router.post(
+    '/login', 
+    [
+        check('email')
+        .isEmail()
+        .withMessage('Please enter a valid email.')
+    ],
+    authController.postLogin);
 
 router.post(
     '/signup', 
@@ -18,11 +27,19 @@ router.post(
         .isEmail()
         .withMessage('Please enter a valid email.')
         .custom((value, {req}) => {
-            if(value === 'test@test.com'){
-                throw new Error('im just testing')
+            // if(value === 'test@test.com'){
+            //     throw new Error('im just testing')
+            // }
+            // return true
+            return User
+            .findOne({ email: value })
+            .then(userDoc => {
+              if(userDoc){
+                return Promise.reject('Email already registered')
             }
-            return true
-        }),
+        })
+    
+    }),
         body(
             'password',
             'password must be at least 5 characters long and only numbers or letters'
